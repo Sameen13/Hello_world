@@ -1,0 +1,15 @@
+SUBDESIGN REG
+(
+	A[3..0], Clk, D_in, Reset: INPUT;
+	wr, gr, gl				: INPUT;
+	Out[3..0]				:OUTPUT;
+)
+VARIABLE
+RG[3..0]: DFF;
+C		: NODE;
+BEGIN
+C = !(wr#gl#gr)#Clk;
+RG[].(Clk, CLRN) = (C, !Reset); %îáíóëåíèå%
+RG[].D = wr&A[]#gl&(RG[2..0].Q, D_in);
+Out[] = RG[].Q;
+END;
